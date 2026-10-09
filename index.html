@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111413">
+  <title>Eldeens106 Hub</title>
+  </style}>
+    :root {
+      color-scheme: dark;
+      --page: #111413;
+      --panel: #1a201d;
+      --panel-soft: #151a18;
+      --line: #303a35;
+      --text: #f4f3ec;
+      --muted: #a6b0a9;
+      --lime: #c7f36b;
+      --pink: #ff738d;
+      --danger: #ff9da9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 48px 20px;
+      color: var(--text);
+      background-color: var(--page);
+      background-image: radial-gradient(#ffffff0b 0.7px, transparent 0.7px);
+      background-size: 14px 14px;
+      font-family: Tahoma, "Segoe UI", sans-serif;
+    }
+
+    main {
+      width: min(100%, 620px);
+      margin-inline: auto;
+      animation: arrive 450ms ease-out both;
+    }
+
+    .masthead {
+      margin: 0 0 28px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--lime);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 8vw, 3rem);
+      line-height: 1.15;
+    }
+
+    .card {
+      margin: 14px 0;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      font-size: 1.1rem;
+    }
+
+    .card-heading span { color: var(--lime); }
+
+    form { display: grid; gap: 12px; }
+
+    input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      outline: none;
+      background: var(--panel-soft);
+      color: var(--text);
+      font: inherit;
+      text-align: right;
+    }
+
+    input:focus-visible { border-color: var(--lime); }
+    input::placeholder { color: #87928a; }
+
+    button {
+      min-height: 48px;
+      margin-top: 2px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--lime);
+      color: #17200e;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      transition: background-color 120ms ease, transform 120ms ease;
+    }
+
+    button:hover { background: #d8ff91; }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+    button:disabled { cursor: wait; opacity: 0.65; }
+
+    .status {
+      min-height: 1.4em;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .status.error { color: var(--danger); }
+
+    .scores { display: grid; gap: 7px; }
+
+    .score {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 8px 12px;
+      border: 1px solid #303a353d;
+      border-radius: 5px;
+      background: var(--panel-soft);
+    }
+
+    .rank { color: var(--muted); font-size: 0.85rem; }
+    .player { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .points { color: var(--lime); font-variant-numeric: tabular-nums; }
+    .empty { margin: 0; color: var(--muted); }
+
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 28px 16px; }
+      .card { padding: 20px 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <p class="eyebrow">لوحة اللاعبين</p>
+      <h1>Eldeens106 Hub</h1>
+    </header>
+
+    <section class="card" aria-labelledby="game-title">
+      <h2 class="card-heading" id="game-title"><span aria-hidden="true">◆</span> PhonyUncomfortableErrors</h2>
+      <form id="scoreForm">
+        <input id="playerName" name="name" maxlength="32" autocomplete="nickname" placeholder="اسمك" aria-label="اسم اللاعب">
+        <input id="playerScore" name="score" type="number" min="0" max="999999999" step="1" inputmode="numeric" placeholder="السكور" aria-label="السكور" required>
+        <button id="saveButton" type="submit">حفظ السكور</button>
+      </form>
+      <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="scores-title">
+      <h2 class="card-heading" id="scores-title"><span aria-hidden="true">★</span> Top Scores</h2>
+      <div class="scores" id="scoresList" aria-live="polite"><p class="empty">جارٍ تحميل السكورات...</p></div>
+    </section>
+  </main>
+
+  <script>
+    const storageKey = 'eldeens106-scores';
+    const form = document.getElementById('scoreForm');
+    const nameInput = document.getElementById('playerName');
+    const scoreInput = document.getElementById('playerScore');
+    const saveButton = document.getElementById('saveButton');
+    const formStatus = document.getElementById('formStatus');
+    const scoresList = document.getElementById('scoresList');
+
+    function readLocalScores() {
+      try {
+        const scores = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        return Array.isArray(scores) ? scores : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveLocalScore(entry) {
+      const scores = [...readLocalScores(), entry]
+        .sort((first, second) => second.score - first.score)
+        .slice(0, 10);
+      localStorage.setItem(storageKey, JSON.stringify(scores));
+      return scores;
+    }
+
+    function renderScores(scores) {
+      scoresList.replaceChildren();
+      if (!Array.isArray(scores) || scores.length === 0) {
+        const empty = document.createElement('p');
+        empty.className = 'empty';
+        empty.textContent = 'لسه مفيش سكورات...';
+        scoresList.append(empty);
+        return;
+      }
+
+      scores.slice(0, 10).forEach((score, index) => {
+        const row = document.createElement('div');
+        row.className = 'score';
+        const rank = document.createElement('span');
+        rank.className = 'rank';
+        rank.textContent = `${index + 1}.`;
+        const player = document.createElement('span');
+        player.className = 'player';
+        player.textContent = String(score.name || 'Player');
+        const points = document.createElement('b');
+        points.className = 'points';
+        points.textContent = Number(score.score) || 0;
+        row.append(rank, player, points);
+        scoresList.append(row);
+      });
+    }
+
+    async function loadScores() {
+      try {
+        const response = await fetch('/api/scores');
+        if (!response.ok) throw new Error('API unavailable');
+        const data = await response.json();
+        renderScores(data.scores);
+      } catch {
+        renderScores(readLocalScores());
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const parsedScore = Number(scoreInput.value);
+      if (!Number.isSafeInteger(parsedScore) || parsedScore < 0) {
+        formStatus.textContent = 'أدخل سكور صحيحًا.';
+        formStatus.classList.add('error');
+        scoreInput.focus();
+        return;
+      }
+
+      const entry = {
+        name: nameInput.value.trim().slice(0, 32) || 'Player',
+        score: parsedScore
+      };
+      saveButton.disabled = true;
+      formStatus.textContent = '';
+      formStatus.classList.remove('error');
+
+      try {
+        const response = await fetch('/api/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        if (!response.ok) throw new Error('API unavailable');
+        const data = await response.json();
+        renderScores(data.scores);
+      } catch {
+        try {
+          renderScores(saveLocalScore(entry));
+          formStatus.textContent = 'נשמר במכשיר הזה בלבד.';
+        } catch {
+          formStatus.textContent = 'לא ניתן לשמור את הסקור בדפדפן הזה.';
+          formStatus.classList.add('error');
+        }
+      } finally {
+        saveButton.disabled = false;
+      }
+    });
+
+    loadScores();
+  </script>
+</body>
+</html>
