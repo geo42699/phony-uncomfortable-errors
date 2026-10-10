@@ -1,107 +1,235 @@
-<!DOCTYPE html>
+User: <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saif's Simple Games</title>
+<title>Saif Games</title>
 <style>
-body{margin:0;background:#0f1220;color:#e8eaff;padding:15px;font-family:Tahoma}
-h1{text-align:center;color:#5b6cff}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:15px 0}
-.tab{padding:10px 14px;background:#1a1d35;border:1px solid #2a2e5a;border-radius:10px;cursor:pointer}
-.tab.active{background:#5b6cff;color:white}
-.section{display:none;background:#1a1d35;border-radius:16px;padding:18px;margin-top:10px;border:1px solid #2a2e5a}
-.section.active{display:block}
-button{padding:10px 16px;border:none;border-radius:10px;background:#5b6cff;color:white;cursor:pointer;margin:5px}
-input,select{padding:10px;border-radius:10px;border:1px solid #333;background:#0f1220;color:white;width:100%;margin:6px 0}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:auto}
-.cell{aspect-ratio:1;background:#0f1220;border:2px solid #2a2e5a;border-radius:10px;font-size:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.leader-item{padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between}
-.gold{background:linear-gradient(90deg,#1e3a8a,#3b82f6);border:2px solid #60a5fa}
-.silver{background:linear-gradient(90deg,#374151,#9ca3af);border:2px solid #d1d5db}
-.bronze{background:linear-gradient(90deg,#7c2d12,#d97706);border:2px solid #f59e0b}
-.normal{background:#0f1220;border:1px solid #2a2e5a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f23;color:#fff;font-family:system-ui;padding:20px}
+h1{text-align:center;margin-bottom:20px;color:#8b5cf6}
+.games{display:flex;flex-direction:column;gap:15px;max-width:500px;margin:0 auto}
+.game-card{background:#1e1e3f;border:1px solid #3a3a6a;border-radius:16px;padding:20px;cursor:pointer;transition:.2s}
+.game-card:hover{transform:translateY(-3px);border-color:#8b5cf6}
+.game-card h3{font-size:20px;margin-bottom:5px}
+.game-card p{opacity:.6;font-size:14px}
+.leaderboard{background:#1e1e3f;border-radius:16px;padding:15px;max-width:500px;margin:20px auto}
+.admin{background:#1e1e3f;border-radius:16px;padding:20px;max-width:500px;margin:20px auto}
+input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:none;font-size:16px}
+button{background:#8b5cf6;color:#fff;cursor:pointer;font-weight:bold}
+button:hover{background:#7c3aed}
+.secondary{background:#2a2a5a}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0;max-width:300px}
+.cell{aspect-ratio:1;background:#2a2a5a;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;cursor:pointer}
+.cell:hover{background:#3a3a6a}
+.difficulty{display:flex;gap:8px;margin:10px 0}
+.difficulty button{flex:1;padding:8px;font-size:14px}
+.difficulty button.active{background:#10b981}
+.hidden{display:none}
 </style>
 </head>
 <body>
-<h1>🎮 Saif's Simple Games</h1>
-<div style="text-align:center">
-<input id="username" placeholder="اكتب اسمك" style="max-width:300px">
-<button onclick="saveName()">حفظ الاسم</button>
-<span id="pointsDisplay"></span>
+<h1>🎮 ألعاب سيف</h1>
+
+<div class="games">
+  <div class="game-card" onclick="openGame('xo')">
+    <h3>❌⭕ XO - ضد الروبوت</h3>
+    <p>العب ضد الكمبيوتر واختار الصعوبة</p>
+  </div>
+  <div class="game-card" onclick="openGame('memory')">
+    <h3>🧠 لعبة الذاكرة</h3>
+    <p>افتكر الأماكن</p>
+  </div>
+  <div class="game-card" onclick="openGame('click')">
+    <h3>👆 سرعة الضغط</h3>
+    <p>اضغط أسرع ما يمكن</p>
+  </div>
 </div>
-<div class="tabs">
-<div class="tab active" onclick="openTab('games')">🎮 الالعاب</div>
-<div class="tab" onclick="openTab('calc')">🧮 الحساب</div>
-<div class="tab" onclick="openTab('code')">💻 برمج</div>
-<div class="tab" onclick="openTab('typing')">⌨️ سرعة كتابتك</div>
-<div class="tab" onclick="openTab('leader')">🏆 التصنيف</div>
-<div class="tab" onclick="openTab('wipe')">🗑️ محو النقاط</div>
+
+<div id="gameArea" class="admin hidden">
+  <button class="secondary" onclick="closeGame()">⬅ رجوع</button>
+  <div id="gameContent"></div>
 </div>
-<div id="games" class="section active">
-<h3>قسم الالعاب</h3>
-<button onclick="showGame('xo')">XO - 5 نقاط</button>
-<button onclick="showGame('rps')">حجر ورقة مقص - 3 نقاط</button>
-<button onclick="showGame('guess')">التخمين - 10 نقاط</button>
-<div id="xo" style="display:none;margin-top:15px"><div class="grid3" id="xoBoard"></div><p id="xoStatus"></p><button onclick="resetXO()">اعادة</button></div>
-<div id="rps" style="display:none;margin-top:15px"><button onclick="playRPS('حجر')">🪨 حجر</button><button onclick="playRPS('ورقة')">📄 ورقة</button><button onclick="playRPS('مقص')">✂️ مقص</button><p id="rpsResult"></p></div>
-<div id="guess" style="display:none;margin-top:15px"><input id="guessInput" type="number" placeholder="خمن 1-100"><button onclick="checkGuess()">خمن</button><p id="guessResult"></p><button onclick="newGuess()">رقم جديد</button></div>
+
+<div class="leaderboard">
+  <h3>🏆 النقاط</h3>
+  <div id="board"></div>
 </div>
-<div id="calc" class="section"><h3>آلة حاسبة - 0 نقطة</h3><input id="calcInput" placeholder="5+5*2"><button onclick="doCalc()">احسب</button><p id="calcResult"></p></div>
-<div id="code" class="section"><h3>برمجة - 5 نقاط للسؤال</h3><p id="codeQ"></p><div id="codeOpts"></div><p id="codeFeedback"></p><button onclick="nextCodeQ()">التالي</button></div>
-<div id="typing" class="section"><h3>سرعة كتابتك - 5 نقاط للجملة</h3><p id="sentence" style="background:#0f1220;padding:12px;border-radius:10px"></p><input id="typingInput" placeholder="اكتب الجملة"><button onclick="checkTyping()">تحقق</button><p id="typingResult"></p><button onclick="newSentence()">جملة جديدة</button></div>
-<div id="leader" class="section"><h3>🏆 التصنيف</h3><div id="leaderList"></div><button onclick="renderLeader()">تحديث</button></div>
-<div id="wipe" class="section"><h3>🗑️ محو النقاط - الباسورد geo42699</h3><input id="wipePass" type="password" placeholder="الباسورد"><br><button onclick="wipeMy()">محو نقاطي</button><button onclick="wipeOthers()">محو الكل عدا انا</button><button onclick="wipeAll()">محو الكل</button><br><br><select id="wipeSelect"></select><button onclick="wipeSelected()">امسح المختار</button><p id="wipeMsg"></p></div>
+
+<div class="admin">
+  <h3>🗑️ محو النقاط</h3>
+  <input type="password" id="pass" placeholder="الباسورد">
+  <div style="display:flex;gap:8px">
+    <button onclick="deleteAll()">محو الكل</button>
+    <button onclick="deleteAllExceptMe()">محو الكل ماعدا انا</button>
+    <button class="secondary" onclick="deleteMe()">محو نقاطي</button>
+  </div>
+  <select id="userSelect"></select>
+  <button class="secondary" onclick="deleteSelected()">امسح المختار</button>
+  <p id="msg" style="margin-top:10px;color:#10b981"></p>
+</div>
+
 <script>
-let currentUser=localStorage.getItem('ssg_name')||'';
-let data=JSON.parse(localStorage.getItem('ssg_data')||'{}');
-let sentences=["سيف يلعب ماينكرافت كل يوم","البرمجة تحتاج صبر وتركيز كبير","حجر ورقة مقص لعبة ممتعة","تعلم الكود يفتح المستقبل امامك","سرعة الكتابة مهارة مهمة جدا","الذكاء الاصطناعي يغير العالم اليوم","الالعاب تعلم التفكير المنطقي السريع","الالة الحاسبة تحل المسائل بسرعة","التخمين يحتاج ذكاء وحدس قوي","الكود النظيف اسهل في الفهم","المبرمج الجيد يحل المشاكل يوميا","الكمبيوتر ينفذ اوامر الانسان بدقة","الانترنت يربط الناس حول العالم","التصميم الجميل يجذب المستخدمين فورا","قاعدة البيانات تخزن المعلومات بامان","الخوارزميات اساس علوم الحاسب الالي","لغات البرمجة كثيرة ومتنوعة جدا","التعلم المستمر سر النجاح الدائم","المشاريع الصغيرة تصبح كبيرة يوما","الابداع ياتي من التجربة والخطا","سيف يبني العاب باحتراف عالي","الرياضيات تساعد على فهم البرمجة","حل المشكلات مهارة اساسية للمبرمج","العمل الجماعي ينجز المشاريع بسرعة","التحدي يصنع مبرمج قوي ومبدع"];
-let guessNumber=Math.floor(Math.random()*100)+1;
-let xoTurn='X';
-let xoBoardState=Array(9).fill('');
-const codeQuestions=[{q:"لغة صفحات الويب؟",opts:["Python","HTML","C++"],a:1},{q:"print(2+3) = ؟",opts:["23","5"],a:1},{q:"رمز التعليق في بايثون؟",opts:["//","#"],a:1},{q:"CSS تعني؟",opts:["Cascading Style Sheets","Computer Style"],a:0},{q:"حلقة تكرار؟",opts:["if","for"],a:1},{q:"10 % 3 = ؟",opts:["1","3"],a:0},{q:"لغة AI؟",opts:["Python","HTML"],a:0},{q:"وظيفة git؟",opts:["ادارة الكود","رسم"],a:0}];
-let codeQIndex=0,typingIndex=0;
-function saveName(){let n=document.getElementById('username').value.trim();if(!n)return alert('اكتب اسمك');currentUser=n;localStorage.setItem('ssg_name',n);if(!(n in data))data[n]=0;saveData();renderLeader();populateWipeSelect();alert('تم: '+n);}
-function saveData(){localStorage.setItem('ssg_data',JSON.stringify(data));updatePoints();}
-function addPoints(p){if(!currentUser)return alert('اكتب اسمك فوق');if(!(currentUser in data))data[currentUser]=0;data[currentUser]+=p;saveData();renderLeader();}
-function updatePoints(){document.getElementById('pointsDisplay').innerText=currentUser?`${currentUser}: ${data[currentUser]||0} نقطة`:'';document.getElementById('username').value=currentUser;}
-function openTab(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');event.target.classList.add('active');if(id==='leader')renderLeader();if(id==='typing')newSentence();if(id==='code')showCodeQ();if(id==='wipe')populateWipeSelect();}
-function showGame(g){document.getElementById('xo').style.display=g==='xo'?'block':'none';document.getElementById('rps').style.display=g==='rps'?'block':'none';document.getElementById('guess').style.display=g==='guess'?'block':'none';if(g==='xo')resetXO();}
-function resetXO(){xoBoardState=Array(9).fill('');xoTurn='X';document.getElementById('xoStatus').innerText='دور: '+xoTurn;renderXO();}
-function renderXO(){let b=document.getElementById('xoBoard');b.innerHTML='';xoBoardState.forEach((v,i)=>{let d=document.createElement('div');d.className='cell';d.innerText=v;d.onclick=()=>{if(xoBoardState[i])return;xoBoardState[i]=xoTurn;if(checkWin()){document.getElementById('xoStatus').innerText='فاز '+xoTurn+' +5';addPoints(5);xoBoardState=Array(9).fill('');}else if(xoBoardState.every(c=>c)){document.getElementById('xoStatus').innerText='تعادل';}else{xoTurn=xoTurn==='X'?'O':'X';document.getElementById('xoStatus').innerText='دور: '+xoTurn;}renderXO();};b.appendChild(d);});}
-function checkWin(){const w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return w.some(([a,b,c])=>xoBoardState[a]&&xoBoardState[a]===xoBoardState[b]&&xoBoardState[a]===xoBoardState[c]);}
-function playRPS(u){let ch=['حجر','ورقة','مقص'];let comp=ch[Math.floor(Math.random()*3)];let r='';if(u===comp)r='تعادل!';else if((u==='حجر'&&comp==='مقص')||(u==='ورقة'&&comp==='حجر')||(u==='مقص'&&comp==='ورقة')){r=`فزت! ${comp} +3`;addPoints(3);}else r=`خسرت! ${comp}`;document.getElementById('rpsResult').innerText=r;}
-function newGuess(){guessNumber=Math.floor(Math.random()*100)+1;document.getElementById('guessResult').innerText='رقم جديد!';}
-function checkGuess(){let g=parseInt(document.getElementById('guessInput').value);if(!g)return;if(g===guessNumber){document.getElementById('guessResult').innerText='صح! +10 🎉';addPoints(10);newGuess();}else if(g<guessNumber)document.getElementById('guessResult').innerText='اكبر ↑';else document.getElementById('guessResult').innerText='اصغر ↓';}
-function calculate(expression){
-let position=0;
-function skipSpaces(){while(/\s/.test(expression[position]||''))position++;}
-function parsePrimary(){
-skipSpaces();
-if(expression[position]==='('){position++;let value=parseExpression();skipSpaces();if(expression[position]!==')')throw new Error('Expected closing parenthesis');position++;return value;}
-let number=expression.slice(position).match(/^(?:\d+(?:\.\d*)?|\.\d+)/);
-if(!number)throw new Error('Expected a number');
-position+=number[0].length;
-return Number(number[0]);
+const PASSWORD = "121312";
+let currentUser = localStorage.getItem('saif_user') || prompt("اسمك ايه؟") || "لاعب";
+localStorage.setItem('saif_user', currentUser);
+let scores = JSON.parse(localStorage.getItem('saif_scores') || '{}');
+if(!scores[currentUser]) scores[currentUser]=0;
+let difficulty = 'hard';
+
+function saveScores(){ localStorage.setItem('saif_scores', JSON.stringify(scores)); renderBoard(); renderUsers(); }
+function addPoints(p){
+  scores[currentUser] = (scores[currentUser]||0)+p;
+  saveScores();
 }
-function parseUnary(){skipSpaces();if(expression[position]==='+'){position++;return parseUnary();}if(expression[position]==='-'){position++;return -parseUnary();}return parsePrimary();}
-function parseTerm(){let value=parseUnary();while(true){skipSpaces();let operator=expression[position];if(operator!=='*'&&operator!=='/')return value;position++;let next=parseUnary();value=operator==='*'?value*next:value/next;}}
-function parseExpression(){let value=parseTerm();while(true){skipSpaces();let operator=expression[position];if(operator!=='+'&&operator!=='-')return value;position++;let next=parseTerm();value=operator==='+'?value+next:value-next;}}
-let result=parseExpression();skipSpaces();if(position!==expression.length||!Number.isFinite(result))throw new Error('Invalid expression');return result;
+function renderBoard(){
+  let html = Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(([n,s])=>`<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #333"><span>${n}</span><b>${s}</b></div>`).join('');
+  document.getElementById('board').innerHTML = html || "لسه مفيش نقاط";
 }
-function doCalc(){try{let r=calculate(document.getElementById('calcInput').value);document.getElementById('calcResult').innerText='= '+r;addPoints(0);}catch{document.getElementById('calcResult').innerText='خطأ';}}
-function showCodeQ(){let q=codeQuestions[codeQIndex];document.getElementById('codeQ').innerText=q.q;let o=document.getElementById('codeOpts');o.innerHTML='';q.opts.forEach((opt,i)=>{let b=document.createElement('button');b.innerText=opt;b.onclick=()=>{if(i===q.a){document.getElementById('codeFeedback').innerText='صح! +5';addPoints(5);}else document.getElementById('codeFeedback').innerText='غلط! الصح: '+q.opts[q.a];};o.appendChild(b);});}
-function nextCodeQ(){codeQIndex=(codeQIndex+1)%codeQuestions.length;document.getElementById('codeFeedback').innerText='';showCodeQ();}
-function newSentence(){typingIndex=Math.floor(Math.random()*sentences.length);document.getElementById('sentence').innerText=sentences[typingIndex];document.getElementById('typingInput').value='';}
-function checkTyping(){let inp=document.getElementById('typingInput').value.trim();if(inp===sentences[typingIndex]){document.getElementById('typingResult').innerText='ممتاز! +5';addPoints(5);newSentence();}else document.getElementById('typingResult').innerText='غلط';}
-function renderLeader(){let s=Object.entries(data).sort((a,b)=>b[1]-a[1]);let l=document.getElementById('leaderList');l.replaceChildren();s.forEach(([n,p],i)=>{let d=document.createElement('div');d.className='leader-item '+(i===0?'gold':i===1?'silver':i===2?'bronze':'normal');let label=document.createElement('span');let col=i===0?' 🔵 ازرق':i===1?' ⚪ رمادي':i===2?' 🟤 برونز':'';let trophy=i<3?' 🏆':'';label.textContent=`${i+1}. ${n}${col}${trophy}`;let points=document.createElement('span');points.textContent=p;d.append(label,points);l.appendChild(d);});}
-function populateWipeSelect(){let sel=document.getElementById('wipeSelect');sel.innerHTML='';Object.keys(data).forEach(n=>{let o=document.createElement('option');o.value=n;o.innerText=n;sel.appendChild(o);});}
-function checkPass(){let p=document.getElementById('wipePass').value;if(p!=='geo42699'){document.getElementById('wipeMsg').innerText='الباسورد غلط!';return false;}return true;}
-function wipeMy(){if(!checkPass())return;data[currentUser]=0;saveData();document.getElementById('wipeMsg').innerText='تم محو نقاطك';renderLeader();}
-function wipeOthers(){if(!checkPass())return;Object.keys(data).forEach(k=>{if(k!==currentUser)data[k]=0;});saveData();document.getElementById('wipeMsg').innerText='تم محو الكل عدا انت';renderLeader();populateWipeSelect();}
-function wipeAll(){if(!checkPass())return;Object.keys(data).forEach(k=>data[k]=0);saveData();document.getElementById('wipeMsg').innerText='تم محو الكل';renderLeader();populateWipeSelect();}
-function wipeSelected(){if(!checkPass())return;let sel=document.getElementById('wipeSelect').value;data[sel]=0;saveData();document.getElementById('wipeMsg').innerText='تم محو '+sel;renderLeader();populateWipeSelect();}
-updatePoints();renderLeader();resetXO();showCodeQ();newSentence();populateWipeSelect();
+function renderUsers(){
+  let sel=document.getElementById('userSelect');
+  sel.innerHTML = Object.keys(scores).map(u=>`<option value="${u}">${u}</option>`).join('');
+}
+function openGame(name){
+  document.getElementById('gameArea').classList.remove('hidden');
+  window.scrollTo(0,0);
+  if(name==='xo') renderXO();
+  if(name==='memory') renderMemory();
+  if(name==='click') renderClick();
+}
+function closeGame(){ document.getElementById('gameArea').classList.add('hidden'); }
+
+function renderXO(){
+  document.getElementById('gameContent').innerHTML = `
+    <h3>❌⭕ XO ضد الروبوت</h3>
+    <div class="difficulty">
+      <button onclick="setDiff('easy')" id="d-easy">سهل</button>
+      <button onclick="setDiff('medium')" id="d-medium">متوسط</button>
+      <button onclick="setDiff('hard')" id="d-hard" class="active">صعب</button>
+    </div>
+    <div class="grid" id="xoGrid"></div>
+    <p id="xoStatus">دورك - أنت X</p>
+    <button class="secondary" onclick="renderXO()">إعادة</button>
+  `;
+  setDiff(difficulty);
+  initXO();
+}
+function setDiff(d){
+  difficulty=d;
+  document.querySelectorAll('.difficulty button').forEach(b=>b.classList.remove('active'));
+  let el=document.getElementById('d-'+d);
+  if(el) el.classList.add('active');
+}
+let xoBoard, xoOver;
+function initXO(){
+  xoBoard=Array(9).fill(''); xoOver=false;
+  let g=document.getElementById('xoGrid');
+  g.innerHTML='';
+  for(let i=0;i<9;i++){
+    let c=document.createElement('div'); c.className='cell'; c.onclick=()=>xoMove(i); g.appendChild(c);
+  }
+  document.getElementById('xoStatus').textContent="دورك - أنت X";
+}
+function xoMove(i){
+  if(xoBoard[i]||xoOver) return;
+  xoBoard[i]='X'; drawXO();
+  if(checkWin('X')){ winXO('X'); return; }
+  if(xoBoard.every(v=>v)){ drawXO("تعادل!"); return; }
+  document.getElementById('xoStatus').textContent="الروبوت بيفكر...";
+  setTimeout(robotMove, 400);
+}
+function robotMove(){
+  if(xoOver) return;
+  let move = -1;
+  if(difficulty==='easy'){
+    let avail = xoBoard.map((v,i)=>v?'':i).filter(v=>v!=='');
+    move = avail[Math.floor(Math.random()*avail.length)];
+  } else if(difficulty==='medium'){
+    move = findBestMove()?? randomMove();
+    if(Math.random()<0.4) move = randomMove();
+  } else {
+    move = findBestMove()?? randomMove();
+  }
+  if(move>=0) xoBoard[move]='O';
+  drawXO();
+  if(checkWin('O')){ winXO('O'); return; }
+  if(xoBoard.every(v=>v)){ drawXO("تعادل!"); return; }
+  document.getElementById('xoStatus').textContent="دورك";
+}
+function randomMove(){ let a=xoBoard.map((v,i)=>v?'':i).filter(v=>v!==''); return a[Math.floor(Math.random()*a.length)]; }
+function findBestMove(){
+  for(let i=0;i<9;i++) if(!xoBoard[i]){ xoBoard[i]='O'; if(checkWin('O')){ xoBoard[i]=''; return i; } xoBoard[i]=''; }
+  for(let i=0;i<9;i++) if(!xoBoard[i]){ xoBoard[i]='X'; if(checkWin('X')){ xoBoard[i]=''; return i; } xoBoard[i]=''; }
+  return null;
+}
+function checkWin(p){ let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; return w.some(c=>c.every(i=>xoBoard[i]===p)); }
+function drawXO(msg){
+  document.querySelectorAll('.cell').forEach((c,i)=>c.textContent=xoBoard[i]);
+  if(msg) document.getElementById('xoStatus').textContent=msg;
+}
+function winXO(p){
+  xoOver=true;
+  if(p==='X'){
+    let pts = difficulty==='easy'?3:difficulty==='medium'?5:10;
+    addPoints(pts);
+    document.getElementById('xoStatus').textContent=`كسبت! 🎉`;
+  } else {
+    document.getElementById('xoStatus').textContent=`الروبوت كسب 🤖`;
+  }
+}
+function renderMemory(){
+  document.getElementById('gameContent').innerHTML=`<h3>🧠 ذاكرة</h3><div class="grid" id="memGrid"></div><p id="memStatus"></p><button class="secondary" onclick="renderMemory()">إعادة</button>`;
+  let vals=[1,1,2,2,3,3,4,4,5].sort(()=>Math.random()-0.5);
+  let g=document.getElementById('memGrid'); g.innerHTML=''; let first=null, lock=false, matched=0;
+  vals.forEach((v,i)=>{
+    let c=document.createElement('div'); c.className='cell'; c.textContent='?';
+    c.onclick=()=>{
+      if(lock||c.textContent!== '?' ) return;
+      c.textContent=v;
+      if(!first){ first={v,i,el:c}; }
+      else{
+        if(first.v===v && first.i!==i){ matched++; first.el.style.background='#10b981'; c.style.background='#10b981'; if(matched>=4){ addPoints(7); document.getElementById('memStatus').textContent='كسبت!'; } first=null; }
+        else{ lock=true; setTimeout(()=>{ c.textContent='?'; first.el.textContent='?'; first=null; lock=false; },800); }
+      }
+    }; g.appendChild(c);
+  });
+}
+function renderClick(){
+  document.getElementById('gameContent').innerHTML=`<h3>👆 اضغط بسرعة</h3><button id="clickBtn" style="height:150px;font-size:24px">اضغط!</button><p id="clickScore">0</p><button class="secondary" onclick="renderClick()">إعادة</button>`;
+  let sc=0; document.getElementById('clickBtn').onclick=()=>{ sc++; document.getElementById('clickScore').textContent=sc; };
+  setTimeout(()=>{ let b=document.getElementById('clickBtn'); if(b){ b.disabled=true; b.textContent='خلص!'; if(sc>20){ addPoints(5); } } },5000);
+}
+function checkPass(){ if(document.getElementById('pass').value!==PASSWORD){ alert('باسورد غلط'); return false;} return true; }
+function deleteAll(){ if(!checkPass()) return; if(confirm('متأكد تمسح الكل؟')){ scores={}; scores[currentUser]=0; saveScores(); msg('تم محو الكل'); } }
+function deleteAllExceptMe(){ if(!checkPass()) return; let me=currentUser; let myScore=scores[me]||0; scores={}; scores[me]=myScore; saveScores(); msg('تم محو الكل ماعدا '+me); }
+function deleteMe(){ if(!checkPass()) return; scores[currentUser]=0; saveScores(); msg('تم محو نقاطك'); }
+function deleteSelected(){ if(!checkPass()) return; let u=document.getElementById('userSelect').value; if(u){ delete scores[u]; if(u===currentUser) scores[currentUser]=0; saveScores(); msg('تم محو '+u); } }
+function msg(t){ document.getElementById('msg').textContent=t; setTimeout(()=>document.getElementById('msg').textContent='',3000); }
+renderBoard(); renderUsers();
 </script>
 </body>
 </html>
+
+Copilot: Ask User
+Completed with input: {
+  "question": "What would you like me to do with this HTML game page?",
+  "choices": [
+    "Review it for bugs and security issues",
+    "Fix a specific issue",
+    "Improve the design or accessibility",
+    "Save it as a file in the workspace"
+  ]
+}
+
+## Findings
+
+| Severity | Area | Issue |
+|---|---|---|
+| **High** | User names in leaderboard and user selector | Names are interpolated into `innerHTML` without escaping. Since the name comes from `prompt()` and is saved in `localStorage`, a crafted name can execute JavaScript when the board or selector renders. Use `textContent` and DOM APIs, or properly escape the value. |
+| **Medium** | Memory game | Matched cards remain clickable. Clicking the same matched pair again increments `matched` and awards another 7 points, so the reward can be farmed. Mark matched cards and ignore future clicks; also end the game after a win. |
+| **Medium** | Click game | Each start schedules a timer that is never cleared. Resetting or leaving the game can leave old timers that disable a new game or award points based on a previous run. Clear the timer on reset/close, and ensure the callback belongs to the active game. |
+| **Medium** | Admin controls | The password is hardcoded in client-side JavaScript, so it is visible to anyone using the page and offers no real access control. This is only suitable as a casual UI gate; enforce authorization on a server if points or admin actions need protection. |
+| **Low** | XO difficulty and scoring | Difficulty can be changed during a game, and the win reward uses the current setting. A player can start on easy and switch to hard before winning to increase the reward. Lock difficulty for the round or record the starting difficulty. |
+| **Low** | Scores and leaderboard | Scores live only in editable `localStorage`, so users can change their own scores through browser tools. The leaderboard is local to that browser, not shared or tamper-resistant. |
+
+I reviewed the supplied snippet; I did not modify files.
