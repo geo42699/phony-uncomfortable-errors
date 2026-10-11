@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة سيف الدين</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+body{background:#0f0f0f;color:#fff;margin:0;padding:15px}
+h1{text-align:center;color:#a855f7}
+h2{color:#eab308;border-right:4px solid #eab308;padding-right:10px;margin-top:35px}
+.card{background:#1e1e1e;border-radius:12px;padding:15px;margin:12px 0;border:1px solid #333}
+button{cursor:pointer;border:none;border-radius:8px;padding:10px 14px;font-weight:bold;margin:4px}
+button:disabled{opacity:.6;cursor:not-allowed}
+.btn-purple{background:#a855f7;color:#fff}
+.btn-yellow{background:#eab308;color:#000}
+.btn-dark{background:#333;color:#fff}
+input,select{padding:10px;border-radius:8px;border:1px solid #444;background:#111;color:#fff;width:100%;margin:6px 0}
+.grid{display:grid;gap:5px}
+.xo-board{grid-template-columns:repeat(3,1fr);max-width:260px;margin:auto}
+.xo-cell{background:#2a2a2a;height:80px;font-size:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer}
+.memory-grid{grid-template-columns:repeat(7,minmax(0,1fr));max-width:420px;margin:auto}
+.mem-card{background:#2a2a2a;height:55px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;font-size:20px}
+.calc-grid{grid-template-columns:repeat(4,1fr);gap:8px;max-width:300px;margin:auto}
+.calc-btn{background:#2a2a2a;color:#fff;font-size:18px;height:50px}
+.rank-item{display:flex;justify-content:space-between;align-items:center;padding:8px;background:#2a2a2a;border-radius:8px;margin:5px 0}
+@media(max-width:380px){.memory-grid{gap:3px}.mem-card{height:44px;font-size:16px}}
+</style>
+</head>
+<body>
+<h1>منصة سيف الدين</h1>
+
+<div class="card">
+<input id="username" placeholder="اكتب اسمك هنا" maxlength="40">
+<button class="btn-purple" onclick="saveName()">حفظ الاسم</button>
+<span id="hello"></span>
+</div>
+
+<h2>1- قسم الالعاب</h2>
+<div class="card">
+<h3>1- XO ضد الروبوت (المكسب = 2 نقطة)</h3>
+<button class="btn-dark" onclick="setDifficulty('easy')">سهل</button>
+<button class="btn-yellow" onclick="setDifficulty('hard')">صعب</button>
+<span id="xoDiff">صعب</span>
+<div id="xoBoard" class="grid xo-board"></div>
+<p id="xoStatus"></p>
+<button class="btn-purple" onclick="initXO()">اعادة</button>
+</div>
+
+<div class="card">
+<h3>2- لعبة الذاكرة 7 في 7 (المكسب = 4 نقاط)</h3>
+<div id="memBoard" class="grid memory-grid"></div>
+<p id="memStatus"></p>
+<button class="btn-purple" onclick="initMemory()">ابدأ من جديد</button>
+</div>
+
+<div class="card">
+<h3>3- التخمين 1-100 (المكسب = 5 نقاط)</h3>
+<input id="guessInput" type="number" min="1" max="100" step="1" placeholder="خمن رقم">
+<button class="btn-purple" onclick="checkGuess()">خمن</button>
+<p id="guessStatus"></p>
+<button class="btn-dark" onclick="initGuess()">رقم جديد</button>
+</div>
+
+<h2>2- قسم الحساب (المكسب = صفر)</h2>
+<div class="card">
+<h3>الة حاسبة</h3>
+<input id="calcDisplay" readonly style="font-size:22px;text-align:left;direction:ltr">
+<div class="grid calc-grid">
+<button class="btn-dark calc-btn" onclick="calcClear()">C</button>
+<button class="btn-dark calc-btn" onclick="calcAdd('(')">(</button>
+<button class="btn-dark calc-btn" onclick="calcAdd(')')">)</button>
+<button class="btn-yellow calc-btn" onclick="calcAdd('/')">/</button>
+<button class="calc-btn" onclick="calcAdd('7')">7</button><button class="calc-btn" onclick="calcAdd('8')">8</button>
+<button class="calc-btn" onclick="calcAdd('9')">9</button><button class="btn-yellow calc-btn" onclick="calcAdd('*')">*</button>
+<button class="calc-btn" onclick="calcAdd('4')">4</button><button class="calc-btn" onclick="calcAdd('5')">5</button>
+<button class="calc-btn" onclick="calcAdd('6')">6</button><button class="btn-yellow calc-btn" onclick="calcAdd('-')">-</button>
+<button class="calc-btn" onclick="calcAdd('1')">1</button><button class="calc-btn" onclick="calcAdd('2')">2</button>
+<button class="calc-btn" onclick="calcAdd('3')">3</button><button class="btn-yellow calc-btn" onclick="calcAdd('+')">+</button>
+<button class="calc-btn" onclick="calcAdd('0')">0</button><button class="calc-btn" onclick="calcAdd('.')">.</button>
+<button class="btn-dark calc-btn" onclick="calcDel()">⌫</button><button class="btn-purple calc-btn" onclick="calcEqual()">=</button>
+</div>
+</div>
+
+<h2>3- قسم برمج (المكسب = 5 نقاط)</h2>
+<div class="card">
+<p>100 سؤال متنوع (اختياري + مقالي)</p>
+<p>سؤال <span id="qNum">1</span> / 100</p>
+<p id="qText"></p>
+<div id="qOptions"></div>
+<input id="qEssay" placeholder="اجابتك المقالية" style="display:none">
+<button class="btn-purple" onclick="checkQuestion()">تأكيد الاجابة</button>
+<p id="qStatus"></p>
+<button class="btn-dark" onclick="nextQuestion()">التالي</button>
+</div>
+
+<h2>4- قسم التصنيف</h2>
+<div class="card"><h3>افضل 5 لاعبين 🏆</h3><div id="rankList"></div></div>
+<div class="card">
+<h3>محو النقاط 🔐</h3>
+<input id="adminPass" type="password" placeholder="الباسورد 121312">
+<select id="deleteUserSelect"></select>
+<button class="btn-purple" onclick="deleteAll()">محو نقاط الكل</button>
+<button class="btn-purple" onclick="deleteAllExceptMe()">محو الكل ما عدا انا</button>
+<button class="btn-dark" onclick="deleteMyPoints()">محو نقاطي انا</button>
+<button class="btn-yellow" onclick="deleteSelectedUser()">محو نقاط... (المختار)</button>
+<p id="delStatus"></p>
+</div>
+
+<script>
+let currentUser=localStorage.getItem('user')||'';
+let points;
+try{
+ const stored=JSON.parse(localStorage.getItem('points')||'{}');
+ points=stored&&typeof stored==='object'&&!Array.isArray(stored)?stored:{};
+}catch(error){
+ console.error('تعذر قراءة النقاط المحفوظة:',error);
+ points={};
+}
+const PASS='121312';
+document.getElementById('username').value=currentUser;
+function updateHello(){ document.getElementById('hello').textContent=currentUser?' اهلا '+currentUser+' - نقاطك: '+(points[currentUser]||0):''; }
+function saveName(){
+ const name=document.getElementById('username').value.trim();
+ if(!name){ alert('اكتب اسمك اولا'); return; }
+ currentUser=name; localStorage.setItem('user',currentUser);
+ if(!Number.isFinite(points[currentUser])) points[currentUser]=0;
+ savePoints();
+}
+function savePoints(){ localStorage.setItem('points',JSON.stringify(points)); updateHello(); updateRank(); }
+function addPoints(n){
+ if(!currentUser){ alert('اكتب اسمك اولا'); return false; }
+ points[currentUser]=(Number(points[currentUser])||0)+n; savePoints(); return true;
+}
+updateHello();
+
+let xoDifficulty='hard',xoCells=[],xoGameOver=false,xoPending=false,xoTimer;
+function setDifficulty(d){ xoDifficulty=d; document.getElementById('xoDiff').textContent=d==='easy'?'سهل':'صعب'; initXO(); }
+function initXO(){
+ clearTimeout(xoTimer); xoGameOver=false; xoPending=false; xoCells=Array(9).fill('');
+ const board=document.getElementById('xoBoard'); board.replaceChildren();
+ document.getElementById('xoStatus').textContent='';
+ for(let i=0;i<9;i++){ const cell=document.createElement('div'); cell.className='xo-cell'; cell.onclick=()=>xoMove(i); board.appendChild(cell); }
+ renderXO();
+}
+function renderXO(){ document.querySelectorAll('.xo-cell').forEach((cell,i)=>cell.textContent=xoCells[i]); }
+function xoMove(i){
+ if(xoGameOver||xoPending||xoCells[i]!=='') return;
+ xoCells[i]='X'; renderXO();
+ if(checkWin('X')){ finishXO('فزت! +2',true); return; }
+ if(xoCells.every(Boolean)){ finishXO('تعادل'); return; }
+ xoPending=true; document.getElementById('xoStatus').textContent='الروبوت يفكر...'; xoTimer=setTimeout(robotXO,300);
+}
+function robotXO(){
+ if(xoGameOver) return;
+ const empty=xoCells.map((c,i)=>c===''?i:null).filter(i=>i!==null);
+ if(!empty.length){ finishXO('تعادل'); return; }
+ const move=xoDifficulty==='hard'?findBestMove():empty[Math.floor(Math.random()*empty.length)];
+ xoCells[move]='O'; renderXO();
+ if(checkWin('O')) finishXO('الروبوت فاز!');
+ else if(xoCells.every(Boolean)) finishXO('تعادل');
+ else{ xoPending=false; document.getElementById('xoStatus').textContent='دورك'; }
+}
+function minimax(player,depth){
+ if(checkWin('O')) return 10-depth;
+ if(checkWin('X')) return depth-10;
+ if(xoCells.every(Boolean)) return 0;
+ let best=player==='O'?-Infinity:Infinity;
+ for(let i=0;i<9;i++){
+  if(xoCells[i]) continue;
+  xoCells[i]=player;
+  const score=minimax(player==='O'?'X':'O',depth+1);
+  xoCells[i]='';
+  best=player==='O'?Math.max(best,score):Math.min(best,score);
+ }
+ return best;
+}
+function findBestMove(){
+ let bestScore=-Infinity,bestMove=-1;
+ for(let i=0;i<9;i++){
+  if(xoCells[i]) continue;
+  xoCells[i]='O'; const score=minimax('X',0); xoCells[i]='';
+  if(score>bestScore){ bestScore=score; bestMove=i; }
+ }
+ return bestMove;
+}
+function checkWin(p){
+ const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ return wins.some(line=>line.every(i=>xoCells[i]===p));
+}
+function finishXO(text,won=false){
+ xoGameOver=true; xoPending=false; document.getElementById('xoStatus').textContent=text;
+ if(won) addPoints(2);
+}
+
+let memValues=[],memOpen=[],memMatched=0,memLocked=false,memTimer;
+function initMemory(){
+ clearTimeout(memTimer); memValues=[]; memOpen=[]; memMatched=0; memLocked=false;
+ const vals=[]; for(let i=1;i<=24;i++) vals.push(i,i); vals.push(0);
+ for(let i=vals.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [vals[i],vals[j]]=[vals[j],vals[i]]; }
+ memValues=vals;
+ const board=document.getElementById('memBoard'); board.replaceChildren();
+ document.getElementById('memStatus').textContent='';
+ vals.forEach((value,i)=>{ const card=document.createElement('div'); card.className='mem-card'; card.textContent='?'; card.onclick=()=>openMem(i); board.appendChild(card); });
+}
+function openMem(i){
+ if(memLocked||memOpen.length>=2) return;
+ const cards=document.querySelectorAll('.mem-card'),card=cards[i];
+ if(!card||card.textContent!=='?') return;
+ card.textContent=memValues[i]===0?'⭐':memValues[i]; memOpen.push(i);
+ if(memOpen.length!==2) return;
+ const [a,b]=memOpen;
+ if(memValues[a]===memValues[b]){
+  cards[a].dataset.matched='true'; cards[b].dataset.matched='true';
+  cards[a].style.background='#15803d'; cards[b].style.background='#15803d';
+  memMatched+=2; memOpen=[];
+  if(memMatched===48){ document.getElementById('memStatus').textContent='كسبت! +4'; addPoints(4); }
+ }else{
+  memLocked=true;
+  memTimer=setTimeout(()=>{
+   const current=document.querySelectorAll('.mem-card');
+   if(current[a]) current[a].textContent='?';
+   if(current[b]) current[b].textContent='?';
+   memOpen=[]; memLocked=false;
+  },700);
+ }
+}
+
+let secret=0,tries=0,guessSolved=false;
+function initGuess(){
+ secret=Math.floor(Math.random()*100)+1; tries=0; guessSolved=false;
+ document.getElementById('guessInput').value='';
+ document.getElementById('guessStatus').textContent='خمن من 1 لـ 100';
+}
+function checkGuess(){
+ const input=document.getElementById('guessInput'),guess=Number(input.value);
+ if(!input.value||!Number.isInteger(guess)||guess<1||guess>100){ document.getElementById('guessStatus').textContent='اكتب رقما صحيحا من 1 إلى 100'; return; }
+ if(guessSolved) return;
+ tries++;
+ if(guess===secret){ guessSolved=true; document.getElementById('guessStatus').textContent='صح! الرقم '+secret+' في '+tries+' محاولات +5'; addPoints(5); }
+ else document.getElementById('guessStatus').textContent=guess<secret?'اكبر':'اصغر';
+}
+
+function calcAdd(value){ const display=document.getElementById('calcDisplay'); if(display.value==='خطأ') display.value=''; display.value+=value; }
+function calcClear(){ document.getElementById('calcDisplay').value=''; }
+function calcDel(){ const display=document.getElementById('calcDisplay'); display.value=display.value==='خطأ'?'':display.value.slice(0,-1); }
+function calculate(expression){
+ let i=0;
+ function spaces(){ while(expression[i]===' ') i++; }
+ function primary(){
+  spaces();
+  if(expression[i]==='('){ i++; const value=addition(); spaces(); if(expression[i++]!==')') throw Error('قوس غير مغلق'); return value; }
+  const match=expression.slice(i).match(/^(?:\d+\.?\d*|\.\d+)/);
+  if(!match) throw Error('رقم غير صالح');
+  i+=match[0].length; return Number(match[0]);
+ }
+ function unary(){ spaces(); if(expression[i]==='+'){ i++; return unary(); } if(expression[i]==='-'){ i++; return -unary(); } return primary(); }
+ function product(){
+  let value=unary();
+  while(true){ spaces(); const op=expression[i]; if(op!=='*'&&op!=='/') break; i++; const rhs=unary(); if(op==='/'&&rhs===0) throw Error('قسمة على صفر'); value=op==='*'?value*rhs:value/rhs; }
+  return value;
+ }
+ function addition(){
+  let value=product();
+  while(true){ spaces(); const op=expression[i]; if(op!=='+'&&op!=='-') break; i++; const rhs=product(); value=op==='+'?value+rhs:value-rhs; }
+  return value;
+ }
+ const result=addition(); spaces();
+ if(i!==expression.length||!Number.isFinite(result)) throw Error('تعبير غير صالح');
+ return result;
+}
+function calcEqual(){
+ const display=document.getElementById('calcDisplay');
+ try{ if(display.value) display.value=String(calculate(display.value)); }
+ catch(error){ display.value='خطأ'; }
+}
+
+const questions=[
+ {q:'ما هي لغة برمجة الويب الاساسية؟',opts:['HTML','Car','Python'],ans:0},
+ {q:'كم ناتج 2+2*2 ؟',opts:['6','8','4'],ans:0},
+ {q:'ما هو CSS؟',opts:['للتنسيق','للطبخ','للسيارات'],ans:0},
+ {q:'اكتب كلمة تطبع في JavaScript',type:'essay',ans:'console.log'},
+ {q:'ما هي HTML؟',opts:['لغة هيكلة','لغة بايثون','لعبة'],ans:0},
+ {q:'ما امتداد ملفات JavaScript؟',opts:['.js','.css','.html'],ans:0},
+ {q:'أي نوع بيانات يمثل true أو false؟',opts:['boolean','string','array'],ans:0},
+ {q:'ما الوسم المستخدم لإنشاء رابط في HTML؟',opts:['<a>','<p>','<img>'],ans:0},
+ {q:'ما الخاصية المستخدمة لتغيير لون النص في CSS؟',opts:['color','font-size','padding'],ans:0},
+ {q:'ما الطريقة التي تضيف عنصرا إلى نهاية المصفوفة؟',opts:['push','pop','shift'],ans:0},
+ {q:'أي عامل يقارن القيمة والنوع معا؟',opts:['===','=','=>'],ans:0},
+ {q:'ما الوسم المستخدم لإنشاء فقرة؟',opts:['<p>','<h1>','<br>'],ans:0},
+ {q:'ما نتيجة typeof 42 في JavaScript؟',opts:['number','string','boolean'],ans:0},
+ {q:'ما الكلمة المستخدمة لتعريف ثابت؟',opts:['const','function','return'],ans:0},
+ {q:'أي وسم HTML ينشئ زر؟',opts:['<button>','<click>','<press>'],ans:0},
+ {q:'ما الخاصية التي تضيف مسافة داخلية في CSS؟',opts:['padding','margin','border'],ans:0},
+ {q:'ما ناتج 10 % 3؟',opts:['1','3','0'],ans:0},
+ {q:'أي طريقة تحوّل JSON النصي إلى قيمة؟',opts:['JSON.parse','JSON.stringify','JSON.read'],ans:0},
+ {q:'أي بنية تكرر الأوامر ما دام الشرط صحيحا؟',opts:['while','switch','try'],ans:0},
+ {q:'ما الوسم المستخدم لإدراج صورة؟',opts:['<img>','<image-text>','<picture-file>'],ans:0}
+];
+for(let i=0;i<80;i++){
+ const a=i+20,b=(i*7)%13+1,kind=i%3;
+ let answer,text;
+ if(kind===0){ answer=a+b; text=`ما ناتج التعبير ${a} + ${b} في JavaScript؟`; }
+ else if(kind===1){ answer=a-b; text=`ما ناتج التعبير ${a} - ${b} في JavaScript؟`; }
+ else{ answer=a*b; text=`ما ناتج التعبير ${a} * ${b} في JavaScript؟`; }
+ const options=[answer,answer+1,answer-1],rotation=i%3;
+ questions.push({q:text,opts:options.slice(rotation).concat(options.slice(0,rotation)).map(String),ans:(3-rotation)%3});
+}
+let qIndex=0,questionAnswered=Array(questions.length).fill(false);
+function showQuestion(){
+ const question=questions[qIndex];
+ document.getElementById('qNum').textContent=qIndex+1;
+ document.getElementById('qText').textContent=question.q;
+ const options=document.getElementById('qOptions'); options.replaceChildren();
+ const essay=document.getElementById('qEssay'); essay.style.display='none'; essay.value='';
+ document.getElementById('qStatus').textContent=questionAnswered[qIndex]?'تمت الإجابة على هذا السؤال':'';
+ if(question.type==='essay') essay.style.display='block';
+ else question.opts.forEach((text,index)=>{
+  const button=document.createElement('button'); button.className='btn-dark'; button.style.display='block'; button.style.width='100%'; button.textContent=text;
+  button.disabled=questionAnswered[qIndex]; button.onclick=()=>checkQuestion(index); options.appendChild(button);
+ });
+}
+function checkQuestion(optionIndex){
+ if(questionAnswered[qIndex]) return;
+ const question=questions[qIndex];
+ const correct=question.type==='essay'
+  ?document.getElementById('qEssay').value.trim().toLowerCase().includes(question.ans.toLowerCase())
+  :optionIndex===question.ans;
+ if(correct){ questionAnswered[qIndex]=true; addPoints(5); showQuestion(); document.getElementById('qStatus').textContent='صح! +5'; }
+ else document.getElementById('qStatus').textContent=question.type==='essay'?'حاول تاني':'غلط';
+}
+function nextQuestion(){ qIndex=(qIndex+1)%questions.length; showQuestion(); }
+
+function updateRank(){
+ const list=document.getElementById('rankList'); list.replaceChildren();
+ Object.entries(points).sort((a,b)=>(Number(b[1])||0)-(Number(a[1])||0)).slice(0,5).forEach(([name,score],index)=>{
+  const row=document.createElement('div'); row.className='rank-item';
+  const player=document.createElement('span'); player.textContent=(['🥇','🥈','🥉'][index]||`${index+1}.`)+' '+name;
+  const total=document.createElement('span'); total.textContent=(Number(score)||0)+' نقطة';
+  row.append(player,total); list.appendChild(row);
+ });
+ const select=document.getElementById('deleteUserSelect'); select.replaceChildren();
+ const placeholder=document.createElement('option'); placeholder.value=''; placeholder.textContent='اختر شخصا'; select.appendChild(placeholder);
+ Object.keys(points).forEach(name=>{ const option=document.createElement('option'); option.value=name; option.textContent=name; select.appendChild(option); });
+}
+function checkPass(){ return document.getElementById('adminPass').value===PASS; }
+function deleteAll(){
+ if(!checkPass()) return alert('الباسورد غلط');
+ if(!confirm('متأكد من محو نقاط الجميع؟')) return;
+ points={}; if(currentUser) points[currentUser]=0; savePoints(); document.getElementById('delStatus').textContent='تم مسح الكل';
+}
+function deleteAllExceptMe(){
+ if(!checkPass()) return alert('الباسورد غلط');
+ const myPoints=currentUser?Number(points[currentUser])||0:0;
+ points={}; if(currentUser) points[currentUser]=myPoints; savePoints(); document.getElementById('delStatus').textContent='تم مسح الكل ما عدا انت';
+}
+function deleteMyPoints(){
+ if(!checkPass()) return alert('الباسورد غلط');
+ if(!currentUser) return alert('احفظ اسمك اولا');
+ points[currentUser]=0; savePoints(); document.getElementById('delStatus').textContent='تم مسح نقاطك';
+}
+function deleteSelectedUser(){
+ if(!checkPass()) return alert('الباسورد غلط');
+ const selected=document.getElementById('deleteUserSelect').value;
+ if(!selected||!Object.prototype.hasOwnProperty.call(points,selected)) return;
+ points[selected]=0; savePoints(); document.getElementById('delStatus').textContent='تم مسح نقاط '+selected;
+}
+
+initXO(); initMemory(); initGuess(); showQuestion(); updateRank();
+</script>
+</body>
+</html>
