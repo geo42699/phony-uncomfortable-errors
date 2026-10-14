@@ -24,12 +24,11 @@
 <div style="display:flex;gap:5px;margin-top:8px"><input id="clearOneName" placeholder="اسم لمحوه"><button class="btnD" onclick="clearPts('one')">محو شخص</button></div>
 
 <hr style="border:2px solid #eab308;margin:25px 0">
-<!-- قائمة المطور المقفولة -->
 <div style="background:#111;padding:15px;border-radius:12px;border:3px solid #eab308">
 <h2 style="color:#eab308;text-align:center">👨‍💻 قائمة المطور</h2>
 
 <div id="devLogin">
-<input id="devPassInput" type="password" placeholder="ادخل باسورد المطور 1234">
+<input id="devPassInput" type="password" placeholder="ادخل باسورد المطور">
 <button class="btnY" style="width:100%" onclick="openDev()">دخول المطور 🔓</button>
 <div id="devMsg" style="color:#ef4444;text-align:center;margin-top:5px"></div>
 </div>
@@ -45,7 +44,6 @@
 <div style="background:#1a1a2a;padding:12px;border-radius:10px;border:2px solid #a855f7;margin:10px 0">
 <h3 style="color:#a855f7">👤 الاسم الوهمي</h3>
 <div style="display:flex;gap:5px"><input id="fakeName" placeholder="الاسم الوهمي"><input id="fakePoints" type="number" placeholder="النقاط" style="width:90px"><button class="btnP" onclick="addFake()">إضافة وهمي</button></div>
-<p style="color:#888;font-size:11px">هيضاف للتصنيف عادي</p>
 </div>
 
 <div id="banList" style="background:#000;padding:10px;border-radius:8px;color:#ffaaaa;border:1px solid #fff;margin-top:10px"></div>
@@ -68,7 +66,7 @@ function checkLogin(){if(myName && players[myName]!=undefined){if(isBanned(myNam
 function doLogin(){var n=document.getElementById('loginName').value.trim();var p=document.getElementById('loginPass').value.trim();if(!n||!p){document.getElementById('loginMsg').innerText='اكتب الاسم والباسورد';return}if(isBanned(n)){document.getElementById('loginMsg').innerText='الاسم ده مبند اسبوع';return}if(users[n] && users[n]!=p){document.getElementById('loginMsg').innerText='الباسورد غلط';return}if(!users[n]){users[n]=p;localStorage.setItem('usersPass',JSON.stringify(users))}if(players[n]==undefined)players[n]=0;myName=n;points=players[n];localStorage.setItem('currentUser',myName);localStorage.setItem('players',JSON.stringify(players));document.getElementById('loginScreen').style.display='none';document.getElementById('myNameShow').innerText=myName;document.getElementById('myPoints').innerText=points;renderRank();renderBans()}
 function doLogout(){localStorage.removeItem('currentUser');location.reload()}
 
-function openDev(){var p=document.getElementById('devPassInput').value;if(p!=ADMIN_PASS){document.getElementById('devMsg').innerText='الباسورد غلط - هو 1234';return}document.getElementById('devLogin').style.display='none';document.getElementById('devPanel').style.display='block';renderBans()}
+function openDev(){var p=document.getElementById('devPassInput').value;if(p!=ADMIN_PASS){document.getElementById('devMsg').innerText='الباسورد غلط';return}document.getElementById('devLogin').style.display='none';document.getElementById('devPanel').style.display='block';renderBans()}
 function closeDev(){document.getElementById('devLogin').style.display='block';document.getElementById('devPanel').style.display='none';document.getElementById('devPassInput').value='';}
 
 function save(){players[myName]=points;localStorage.setItem('players',JSON.stringify(players));document.getElementById('myPoints').innerText=points;renderRank()}
