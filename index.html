@@ -81,7 +81,7 @@ function showSec(id){document.getElementById('games').style.display='none';docum
 document.getElementById('myPoints').innerText=points;
 var xoBoardEl=document.getElementById('xoBoard');var xoCells=[];var xoDiff='medium';var xoMap={easy:2,medium:3,hard:10};
 function setDiff(d){xoDiff=d;resetXO()}
-function resetXO(){xoBoardEl.innerHTML='';xoCells=[];for(var i=0;i<9;i++){xoCells.push('');var c=document.createElement('div');c.className='xocell';c.setAttribute('data-i',i);c.onclick=function(){xoClick(parseInt(this.getAttribute('data-i')))};xoBoardEl.appendChild(c)}renderXO();document.getElementById('xoStatus').innerText='دورك X'}
+function addPts(p){points+=p;players[myName]=points;save()}
 function renderXO(){var cells=document.querySelectorAll('.xocell');for(var i=0;i<cells.length;i++){cells[i].innerText=xoCells[i]}}
 function xoClick(i){if(xoCells[i]!='')return;xoCells[i]='X';renderXO();if(checkWin('X')){addPts(xoMap[xoDiff]);document.getElementById('xoStatus').innerText='فزت +'+xoMap[xoDiff];return}if(xoCells.every(function(v){return v!=''})){document.getElementById('xoStatus').innerText='تعادل';return}setTimeout(robotMove,300)}
 function robotMove(){var av=[];for(var i=0;i<9;i++){if(xoCells[i]=='')av.push(i)}if(!av.length)return;var m=av[Math.floor(Math.random()*av.length)];xoCells[m]='O';renderXO();if(checkWin('O')){document.getElementById('xoStatus').innerText='الروبوت فاز'}}
