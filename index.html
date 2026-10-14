@@ -1,72 +1,70 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>موقعي - باسم وباسورد</title><style>body{background:#000;color:#fff;padding:10px;font-family:Arial}.card{background:#1e1e1e;padding:15px;margin:10px 0;border-radius:12px;border:2px solid #444}button{padding:12px 14px;border:none;border-radius:8px;margin:4px;font-weight:700;cursor:pointer}.btnY{background:#eab308;color:#000}.btnD{background:#fff;color:#000;border:2px solid #eab308}.btnP{background:#a855f7;color:#fff}#loginScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}#loginBox{background:#1e1e1e;border:3px solid #eab308;padding:25px;border-radius:15px;width:100%;max-width:350px;text-align:center}input{padding:12px;width:100%;background:#fff;color:#000;border-radius:8px;margin:8px 0;border:2px solid #eab308;box-sizing:border-box;font-size:16px}#xoBoard{display:grid;grid-template-columns:repeat(3,80px);gap:8px;justify-content:center;margin:15px auto;background:#111;padding:10px;border-radius:10px}.xocell{width:80px;height:80px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;border-radius:8px;border:3px solid #eab308;cursor:pointer}#memGrid{display:grid;grid-template-columns:repeat(4,60px);gap:6px;justify-content:center;margin:10px auto}.memcard{width:60px;height:60px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;border-radius:8px;border:2px solid #a855f7;cursor:pointer}#pts{position:fixed;top:5px;left:5px;background:#eab308;color:#000;padding:8px 12px;border-radius:20px;font-weight:900;z-index:99}</style></head><body>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>موقعي - فيه البان</title><style>body{background:#000;color:#fff;padding:10px;font-family:Arial}.card{background:#1e1e1e;padding:15px;margin:10px 0;border-radius:12px;border:2px solid #444}button{padding:12px 14px;border:none;border-radius:8px;margin:4px;font-weight:700;cursor:pointer}.btnY{background:#eab308;color:#000}.btnD{background:#fff;color:#000;border:2px solid #eab308}.btnP{background:#a855f7;color:#fff}.btnR{background:#ef4444;color:#fff}#loginScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}#loginBox{background:#1e1e1e;border:3px solid #eab308;padding:25px;border-radius:15px;width:100%;max-width:350px;text-align:center}input{padding:12px;width:100%;background:#fff;color:#000;border-radius:8px;margin:8px 0;border:2px solid #eab308;box-sizing:border-box}#xoBoard{display:grid;grid-template-columns:repeat(3,80px);gap:8px;justify-content:center;margin:15px auto;background:#111;padding:10px;border-radius:10px}.xocell{width:80px;height:80px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;border-radius:8px;border:3px solid #eab308;cursor:pointer}#memGrid{display:grid;grid-template-columns:repeat(4,60px);gap:6px;justify-content:center;margin:10px auto}.memcard{width:60px;height:60px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;border-radius:8px;border:2px solid #a855f7;cursor:pointer}#pts{position:fixed;top:5px;left:5px;background:#eab308;color:#000;padding:8px 12px;border-radius:20px;font-weight:900;z-index:99}</style></head><body>
 
-<!-- شاشة الدخول -->
-<div id="loginScreen"><div id="loginBox">
-<h2 style="color:#eab308">🔐 تسجيل الدخول</h2>
-<input id="loginName" placeholder="الاسم (مثلا: احمد)">
-<input id="loginPass" type="password" placeholder="الباسورد">
-<button class="btnY" style="width:100%;padding:15px;font-size:18px" onclick="doLogin()">دخول / تسجيل جديد</button>
-<p style="color:#888;font-size:12px;margin-top:10px">لو الاسم جديد هيتعمل حساب تلقائي<br>لو موجود لازم الباسورد يكون صح</p>
-<div id="loginMsg" style="color:#ef4444;margin-top:8px"></div>
-</div></div>
+<div id="loginScreen"><div id="loginBox"><h2 style="color:#eab308">🔐 دخول</h2><input id="loginName" placeholder="الاسم"><input id="loginPass" type="password" placeholder="الباسورد"><button class="btnY" style="width:100%;padding:15px" onclick="doLogin()">دخول</button><div id="loginMsg" style="color:#ef4444;margin-top:8px"></div></div></div>
 
 <div id="pts">⭐ <span id="myPoints">0</span> | 👤 <span id="myNameShow">-</span> <button class="btnD" style="padding:2px 6px;font-size:10px" onclick="doLogout()">خروج</button></div>
-<h1 style="text-align:center;color:#a855f7;margin-top:50px">🎮 موقعي التعليمي</h1>
-<div style="text-align:center"><button class="btnP" onclick="showSec('games')">🎮 ألعاب</button><button class="btnY" onclick="showSec('calc')">🧮 ذكية</button><button class="btnP" onclick="showSec('code')">💻 برمجة</button><button class="btnY" onclick="showSec('rank')">🏆 تصنيف</button></div>
+<h1 style="text-align:center;color:#a855f7;margin-top:50px">🎮 موقعي</h1>
+<div style="text-align:center"><button class="btnP" onclick="showSec('games')">🎮 ألعاب</button><button class="btnY" onclick="showSec('calc')">🧮 ذكية</button><button class="btnP" onclick="showSec('code')">💻 برمجة</button><button class="btnY" onclick="showSec('rank')">🏆 تصنيف + بان</button></div>
 
 <div id="games" class="card">
-<h2 style="color:#eab308">XO سهل2 متوسط3 صعب10 + ذاكرة4 + تخمين5</h2>
-<div style="text-align:center"><button class="btnD" onclick="setDiff('easy')">سهل 2</button><button class="btnY" onclick="setDiff('medium')">متوسط 3</button><button class="btnD" onclick="setDiff('hard')">صعب 10</button></div>
-<div id="xoStatus" style="text-align:center;color:#0f0;margin:8px;font-weight:900">دورك X</div><div id="xoBoard"></div><div style="text-align:center"><button class="btnD" onclick="resetXO()">إعادة</button></div>
-<hr><h3 style="color:#eab308">الذاكرة =4</h3><div id="memGrid"></div><button class="btnY" onclick="initMem()">ابدأ</button>
-<hr><h3 style="color:#eab308">التخمين =5</h3><p id="guessHint">خمن 1-100</p><input id="guessInput" type="number" placeholder="1-100"><button class="btnY" onclick="checkGuess()">خمن</button><button class="btnD" onclick="resetGuess()">جديد</button>
+<h2 style="color:#eab308">XO سهل2 متوسط3 صعب10</h2><div style="text-align:center"><button class="btnD" onclick="setDiff('easy')">سهل 2</button><button class="btnY" onclick="setDiff('medium')">متوسط 3</button><button class="btnD" onclick="setDiff('hard')">صعب 10</button></div><div id="xoStatus" style="text-align:center;color:#0f0;margin:8px;font-weight:900">دورك X</div><div id="xoBoard"></div><div style="text-align:center"><button class="btnD" onclick="resetXO()">إعادة</button></div><hr><h3 style="color:#eab308">الذاكرة =4</h3><div id="memGrid"></div><button class="btnY" onclick="initMem()">ابدأ</button><hr><h3 style="color:#eab308">التخمين =5</h3><p id="guessHint">خمن 1-100</p><input id="guessInput" type="number" placeholder="1-100"><button class="btnY" onclick="checkGuess()">خمن</button>
 </div>
 
-<div id="calc" class="card" style="display:none"><h2>🧮 آلة حاسبة =0</h2><div id="calcDisp" style="background:#fff;color:#000;padding:15px;font-size:28px;text-align:left;direction:ltr;border-radius:8px">0</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:280px;margin:15px auto"><button class="btnD" onclick="cc()">C</button><button class="btnD" onclick="cd()">⌫</button><button class="btnD" onclick="cp('%')">%</button><button class="btnY" onclick="cp('/')">÷</button><button class="btnD" onclick="cp('7')">7</button><button class="btnD" onclick="cp('8')">8</button><button class="btnD" onclick="cp('9')">9</button><button class="btnY" onclick="cp('*')">×</button><button class="btnD" onclick="cp('4')">4</button><button class="btnD" onclick="cp('5')">5</button><button class="btnD" onclick="cp('6')">6</button><button class="btnY" onclick="cp('-')">-</button><button class="btnD" onclick="cp('1')">1</button><button class="btnD" onclick="cp('2')">2</button><button class="btnD" onclick="cp('3')">3</button><button class="btnY" onclick="cp('+')">+</button><button class="btnD" onclick="cp('0')">0</button><button class="btnD" onclick="cp('.')">.</button><button class="btnY" style="grid-column:span 2" onclick="ce()">=</button></div></div>
+<div id="calc" class="card" style="display:none"><h2>🧮 آلة حاسبة</h2><div id="calcDisp" style="background:#fff;color:#000;padding:15px;font-size:28px;text-align:left;direction:ltr;border-radius:8px">0</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:280px;margin:15px auto"><button class="btnD" onclick="cc()">C</button><button class="btnD" onclick="cd()">⌫</button><button class="btnD" onclick="cp('%')">%</button><button class="btnY" onclick="cp('/')">÷</button><button class="btnD" onclick="cp('7')">7</button><button class="btnD" onclick="cp('8')">8</button><button class="btnD" onclick="cp('9')">9</button><button class="btnY" onclick="cp('*')">×</button><button class="btnD" onclick="cp('4')">4</button><button class="btnD" onclick="cp('5')">5</button><button class="btnD" onclick="cp('6')">6</button><button class="btnY" onclick="cp('-')">-</button><button class="btnD" onclick="cp('1')">1</button><button class="btnD" onclick="cp('2')">2</button><button class="btnD" onclick="cp('3')">3</button><button class="btnY" onclick="cp('+')">+</button><button class="btnD" onclick="cp('0')">0</button><button class="btnD" onclick="cp('.')">.</button><button class="btnY" style="grid-column:span 2" onclick="ce()">=</button></div></div>
 
-<div id="code" class="card" style="display:none"><h2>💻 برمجة 100 سؤال =5</h2><button class="btnY" onclick="nextQuiz()">سؤال جديد</button><div id="quizBox" style="margin-top:10px"></div></div>
+<div id="code" class="card" style="display:none"><h2>💻 برمجة =5 للصح</h2><button class="btnY" onclick="nextQuiz()">سؤال جديد</button><div id="quizBox"></div></div>
 
-<div id="rank" class="card" style="display:none"><h2>🏆 أفضل 5 + كاس 🏆🥈🥉</h2><div id="rankList"></div><hr><h3>🧹 محو</h3><button class="btnD" onclick="clearPts('all')">الكل</button><button class="btnD" onclick="clearPts('allExceptMe')">الكل ما عدا انا</button><button class="btnD" onclick="clearPts('me')">انا</button><button class="btnD" onclick="clearPts('one')">محو اسم</button><input id="clearOneName" placeholder="اسم لمحوه"><hr><input id="newPlayerName" placeholder="اسم وهمي"><input id="newPlayerPoints" type="number" placeholder="نقاط"><button class="btnY" onclick="addPlayer()">إضافة وهمي</button></div>
+<div id="rank" class="card" style="display:none">
+<h2>🏆 أفضل 5</h2><div id="rankList"></div>
+
+<hr style="border:2px solid #eab308;margin:20px 0">
+<h2 style="color:#ef4444;text-align:center">🚫 نظام البان - هنا هتلاقيه 🚫</h2>
+
+<div style="background:#2a1a1a;padding:15px;border-radius:12px;border:3px solid #ef4444">
+<h3 style="color:#fff">الباسورد بتاع البان هو: <span style="background:#eab308;color:#000;padding:2px 8px;border-radius:5px">1234</span></h3>
+
+<input id="adminPass" type="text" placeholder="اكتب باسورد البان هنا 1234" value="1234">
+
+<div style="margin-top:10px">
+<p style="color:#eab308">1- بان لمدة اسبوع:</p>
+<div style="display:flex;gap:5px"><input id="banName" placeholder="اسم الشخص"><button class="btnR" onclick="doBan()">بان اسبوع 🚫</button></div>
+</div>
+
+<div style="margin-top:15px">
+<p style="color:#22c55e">2- فك البان بنفس الباسورد:</p>
+<div style="display:flex;gap:5px"><input id="unbanName" placeholder="اسم الشخص"><button class="btnY" onclick="doUnban()">فك البان ✅</button></div>
+</div>
+
+<div id="banList" style="margin-top:15px;background:#000;padding:10px;border-radius:8px;color:#ffaaaa"></div>
+</div>
+
+<hr style="margin:20px 0">
+<h3>🧹 محو النقاط</h3>
+<button class="btnD" onclick="clearPts('all')">مسح الكل</button>
+<button class="btnD" onclick="clearPts('allExceptMe')">الكل ما عدا انا</button>
+<button class="btnD" onclick="clearPts('me')">نقاطي</button>
+<div style="display:flex;gap:5px;margin-top:8px"><input id="clearOneName" placeholder="اسم لمحوه"><button class="btnD" onclick="clearPts('one')">محو شخص</button></div>
+</div>
 
 <script>
-// === نظام الاسم والباسورد ===
-var users=JSON.parse(localStorage.getItem('usersPass')||'{}'); // {name:pass}
+var ADMIN_PASS='1234';
+var users=JSON.parse(localStorage.getItem('usersPass')||'{}');
 var players=JSON.parse(localStorage.getItem('players')||'{}');
+var bans=JSON.parse(localStorage.getItem('bans')||'{}');
 var myName=localStorage.getItem('currentUser')||'';
 var points=0;
 
-function checkLogin(){
- if(myName && players[myName]!=undefined){
-   document.getElementById('loginScreen').style.display='none';
-   points=players[myName];
-   document.getElementById('myNameShow').innerText=myName;
-   document.getElementById('myPoints').innerText=points;
-   renderRank();
- } else {
-   document.getElementById('loginScreen').style.display='flex';
- }
-}
-function doLogin(){
- var n=document.getElementById('loginName').value.trim();
- var p=document.getElementById('loginPass').value.trim();
- if(!n||!p){document.getElementById('loginMsg').innerText='اكتب الاسم والباسورد';return}
- if(users[n] && users[n]!=p){document.getElementById('loginMsg').innerText='الباسورد غلط للاسم ده';return}
- if(!users[n]){users[n]=p;localStorage.setItem('usersPass',JSON.stringify(users))}
- if(players[n]==undefined)players[n]=0;
- myName=n;points=players[n];
- localStorage.setItem('currentUser',myName);
- localStorage.setItem('players',JSON.stringify(players));
- localStorage.setItem('myPoints',points);
- document.getElementById('loginScreen').style.display='none';
- document.getElementById('myNameShow').innerText=myName;
- document.getElementById('myPoints').innerText=points;
- renderRank();
-}
-function doLogout(){localStorage.removeItem('currentUser');myName='';location.reload()}
-
-function save(){if(!myName)return;players[myName]=points;localStorage.setItem('myPoints',points);localStorage.setItem('players',JSON.stringify(players));document.getElementById('myPoints').innerText=points;renderRank()}
+function isBanned(name){if(!bans[name])return false;if(Date.now()>bans[name]){delete bans[name];localStorage.setItem('bans',JSON.stringify(bans));return false}return true}
+function checkLogin(){if(myName && players[myName]!=undefined){if(isBanned(myName)){alert('انت مبند حتى '+new Date(bans[myName]).toLocaleDateString());doLogout();return}document.getElementById('loginScreen').style.display='none';points=players[myName];document.getElementById('myNameShow').innerText=myName;document.getElementById('myPoints').innerText=points;renderRank();renderBans()}else{document.getElementById('loginScreen').style.display='flex'}}
+function doLogin(){var n=document.getElementById('loginName').value.trim();var p=document.getElementById('loginPass').value.trim();if(!n||!p){document.getElementById('loginMsg').innerText='اكتب الاسم والباسورد';return}if(isBanned(n)){document.getElementById('loginMsg').innerText='الاسم ده مبند اسبوع';return}if(users[n] && users[n]!=p){document.getElementById('loginMsg').innerText='الباسورد غلط';return}if(!users[n]){users[n]=p;localStorage.setItem('usersPass',JSON.stringify(users))}if(players[n]==undefined)players[n]=0;myName=n;points=players[n];localStorage.setItem('currentUser',myName);localStorage.setItem('players',JSON.stringify(players));document.getElementById('loginScreen').style.display='none';document.getElementById('myNameShow').innerText=myName;document.getElementById('myPoints').innerText=points;renderRank();renderBans()}
+function doLogout(){localStorage.removeItem('currentUser');location.reload()}
+function save(){players[myName]=points;localStorage.setItem('players',JSON.stringify(players));document.getElementById('myPoints').innerText=points;renderRank()}
 function addPts(p){points+=p;save()}
-function showSec(id){document.getElementById('games').style.display='none';document.getElementById('calc').style.display='none';document.getElementById('code').style.display='none';document.getElementById('rank').style.display='none';document.getElementById(id).style.display='block';if(id=='rank')renderRank()}
+function showSec(id){document.getElementById('games').style.display='none';document.getElementById('calc').style.display='none';document.getElementById('code').style.display='none';document.getElementById('rank').style.display='none';document.getElementById(id).style.display='block';if(id=='rank'){renderRank();renderBans()}}
+
+function doBan(){var pass=document.getElementById('adminPass').value;if(pass!=ADMIN_PASS){alert('باسورد البان غلط! هو 1234');return}var n=document.getElementById('banName').value.trim();if(!n){alert('اكتب الاسم');return}bans[n]=Date.now()+7*24*60*60*1000;localStorage.setItem('bans',JSON.stringify(bans));renderBans();alert('تم بان '+n+' اسبوع')}
+function doUnban(){var pass=document.getElementById('adminPass').value;if(pass!=ADMIN_PASS){alert('باسورد غلط! نفس باسورد البان 1234');return}var n=document.getElementById('unbanName').value.trim();if(!n){alert('اكتب الاسم');return}if(bans[n]){delete bans[n];localStorage.setItem('bans',JSON.stringify(bans));renderBans();alert('تم فك البان عن '+n)}else alert('مش مبند')}
+function renderBans(){var html='<b>المبندين:</b><br>';var c=0;for(var k in bans){if(Date.now()<bans[k]){html+=k+' حتى '+new Date(bans[k]).toLocaleDateString()+'<br>';c++}}if(c==0)html+='لا يوجد مبندين';document.getElementById('banList').innerHTML=html}
 
 var xoBoardEl=document.getElementById('xoBoard');var xoCells=[];var xoDiff='medium';var xoMap={easy:2,medium:3,hard:10};
 function setDiff(d){xoDiff=d;resetXO()}
@@ -80,16 +78,11 @@ function initMem(){var g=document.getElementById('memGrid');g.innerHTML='';memFi
 function flipMem(el){if(memLock||el.getAttribute('data-done'))return;el.innerText=el.getAttribute('data-icon');el.style.background='#eab308';if(!memFirst){memFirst=el}else{if(memFirst.getAttribute('data-icon')==el.getAttribute('data-icon')){memFirst.setAttribute('data-done','1');el.setAttribute('data-done','1');memFirst.style.background='#22c55e';el.style.background='#22c55e';memFirst=null;if(document.querySelectorAll('[data-done]').length==16)addPts(4)}else{memLock=true;setTimeout(function(){memFirst.innerText='?';memFirst.style.background='#fff';el.innerText='?';el.style.background='#fff';memFirst=null;memLock=false},600)}}}
 
 var guessNum;function resetGuess(){guessNum=Math.floor(Math.random()*100)+1;document.getElementById('guessHint').innerText='خمن 1-100'}function checkGuess(){var v=parseInt(document.getElementById('guessInput').value);if(v==guessNum){addPts(5);resetGuess()}else if(v<guessNum)document.getElementById('guessHint').innerText='أكبر ⬆️';else document.getElementById('guessHint').innerText='أصغر ⬇️'}resetGuess();
-
 var calcStr='';function cp(v){calcStr+=v;document.getElementById('calcDisp').innerText=calcStr}function cc(){calcStr='';document.getElementById('calcDisp').innerText='0'}function cd(){calcStr=calcStr.slice(0,-1);document.getElementById('calcDisp').innerText=calcStr||'0'}function ce(){try{if(calcStr.indexOf('%')>-1)calcStr=calcStr.replace('%','/100*');var r=eval(calcStr);document.getElementById('calcDisp').innerText=r;calcStr=''+r}catch(e){document.getElementById('calcDisp').innerText='خطأ'}}
-
-var quizBank=[{q:'print(2+3*4)=؟',o:['20','14','24'],a:1},{q:'HTML تعني؟',o:['Hyper Text Markup','High Tech','Home Tool'],a:0},{q:'let x=5; x++ =؟',o:['5','6','4'],a:1},{q:'لغة الستايل؟',o:['CSS','JS','PY'],a:0},{q:'10 % 3 =؟',o:['3','1','0'],a:1},{q:'طباعة JS؟',o:['console.log','print','echo'],a:0},{q:'وسم الصورة؟',o:['<img>','<pic>','<image>'],a:0}];for(var i=quizBank.length;i<100;i++){var n=i%7;quizBank.push({q:'سؤال '+(i+1)+': '+i+' % 7 =؟',o:[''+n,''+(n+1),''+(n+2)],a:0})}
+var quizBank=[{q:'print(2+3*4)=؟',o:['20','14','24'],a:1},{q:'HTML؟',o:['Hyper Text Markup','High Tech','Home Tool'],a:0},{q:'x++؟',o:['5','6','4'],a:1},{q:'لغة الستايل؟',o:['CSS','JS','PY'],a:0}];for(var i=quizBank.length;i<100;i++){var n=i%7;quizBank.push({q:'سؤال '+(i+1)+': '+i+' %7=؟',o:[''+n,''+(n+1),''+(n+2)],a:0})}
 function nextQuiz(){var q=quizBank[Math.floor(Math.random()*quizBank.length)];var html='<h4 style="color:#eab308">'+q.q+'</h4>';for(var i=0;i<q.o.length;i++){html+='<button class="btnD" style="width:100%;text-align:right;padding:12px;margin:5px 0" onclick="checkAns('+i+','+q.a+',this)">'+q.o[i]+'</button>'}document.getElementById('quizBox').innerHTML=html}
 function checkAns(ch,co,el){if(ch==co){addPts(5);el.style.background='#22c55e';el.innerText+=' ✅ +5';setTimeout(nextQuiz,800)}else{el.style.background='#ef4444';el.innerText+=' ❌'}}
-
-function renderRank(){var arr=[];for(var k in players){arr.push([k,players[k]])}arr.sort(function(a,b){return b[1]-a[1]});arr=arr.slice(0,5);var list=document.getElementById('rankList');list.innerHTML='';for(var i=0;i<arr.length;i++){var cup=i==0?'🏆':i==1?'🥈':i==2?'🥉':'⭐';var d=document.createElement('div');d.style.cssText='display:flex;justify-content:space-between;background:#fff;color:#000;padding:10px;border-radius:8px;margin:5px 0;font-weight:900';d.innerHTML='<div>'+cup+' '+arr[i][0]+'</div><div>'+arr[i][1]+'</div>';list.appendChild(d)}}
-function clearPts(m){if(m=='all'){players={};users={};players[myName]=0;points=0;localStorage.setItem('usersPass',JSON.stringify(users));save()}else if(m=='allExceptMe'){var me=players[myName]||0;players={};players[myName]=me;save()}else if(m=='me'){points=0;players[myName]=0;save()}else if(m=='one'){var n=document.getElementById('clearOneName').value.trim();if(n&&players[n]){delete players[n];if(users[n])delete users[n];localStorage.setItem('usersPass',JSON.stringify(users));save()}}}
-function addPlayer(){var n=document.getElementById('newPlayerName').value.trim();var p=parseInt(document.getElementById('newPlayerPoints').value);if(!n||isNaN(p))return;players[n]=(players[n]||0)+p;if(!users[n])users[n]='1234';localStorage.setItem('usersPass',JSON.stringify(users));save()}
-
+function renderRank(){var arr=[];for(var k in players){arr.push([k,players[k]])}arr.sort(function(a,b){return b[1]-a[1]});arr=arr.slice(0,5);var list=document.getElementById('rankList');list.innerHTML='';for(var i=0;i<arr.length;i++){var cup=i==0?'🏆':i==1?'🥈':i==2?'🥉':'⭐';var banned=isBanned(arr[i][0])?' 🚫':'';var d=document.createElement('div');d.style.cssText='display:flex;justify-content:space-between;background:#fff;color:#000;padding:10px;border-radius:8px;margin:5px 0;font-weight:900';d.innerHTML='<div>'+cup+' '+arr[i][0]+banned+'</div><div>'+arr[i][1]+'</div>';list.appendChild(d)}}
+function clearPts(m){if(m=='all'){players={};users={};players[myName]=0;points=0;localStorage.setItem('usersPass',JSON.stringify(users))}else if(m=='allExceptMe'){var me=players[myName]||0;var myU=users[myName];players={};users={};players[myName]=me;users[myName]=myU;points=me;localStorage.setItem('usersPass',JSON.stringify(users))}else if(m=='me'){points=0;players[myName]=0}else if(m=='one'){var n=document.getElementById('clearOneName').value.trim();if(n&&players[n]){delete players[n];if(users[n])delete users[n];localStorage.setItem('usersPass',JSON.stringify(users))}}save()}
 checkLogin();resetXO();initMem();nextQuiz();
 </script></body></html>
